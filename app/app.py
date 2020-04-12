@@ -58,8 +58,9 @@ def wol(device):
     return True
 
 def suspend(device):
-    cmd = ['ssh', 'cerebro@' + deviceList[device], '\'sudo systemctl suspend\'']
+    cmd = ['ssh', '-oStrictHostKeyChecking=no', '-i', '/opt/cerebro/ssh/id_rsa', 'cerebro@' + deviceList[device], '\'suspend\'']
     return subprocess.call(cmd) == 0
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
+

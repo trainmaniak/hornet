@@ -1,6 +1,6 @@
 FROM balenalib/rpi-raspbian
 
-RUN apt update && apt install -y python3 python3-venv python3-pip
+RUN apt update && apt install -y python3 python3-venv python3-pip iputils-ping ssh
 
 RUN mkdir /opt/cerebro
 COPY app /opt/cerebro/
