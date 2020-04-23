@@ -15,9 +15,9 @@ deviceList = {
 
 deviceMACList = {
     'oxygen': '70.85.C2.D1.21.F3',
-    'thrain': '34.29.8F.74.48.7A'}
+    'thrain': '0c.dd.24.33.30.56'}
 
-commandList = ['wol', 'suspend']
+commandList = ['wol', 'suspend', 'testssh']
 
 @app.route('/')
 def index():
@@ -32,7 +32,8 @@ def cmd(device, command):
 
     returnBool = \
             (command == 'wol' and wol(device)) \
-            or (command == 'suspend' and suspend(device))
+            or (command == 'suspend' and suspend(device)) \
+            or (command == 'testssh' and test_ssh(device))
 
     response.status = 'ok' if returnBool else 'fail'
     
@@ -57,8 +58,12 @@ def wol(device):
     send_magic_packet(deviceMACList[device])
     return True
 
+def test_ssh(device):
+    cmd = ['ssh', '-oStrictHostKeyChecking=no', 'cerebro@' + deviceList[device], '\'uname\'']
+    return subprocess.call(cmd) == 0
+
 def suspend(device):
-    cmd = ['ssh', '-oStrictHostKeyChecking=no', 'cerebro@' + deviceList[device], '\'./suspend\'']
+    cmd = ['ssh', '-oStrictHostKeyChecking=no', 'cerebro@' + deviceList[device], '\'bin/suspend\'']
     return subprocess.call(cmd) == 0
 
 if __name__ == '__main__':
